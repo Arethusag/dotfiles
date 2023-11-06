@@ -3,7 +3,22 @@
 # Copy this to ~/.config/sway/config and edit it to your liking.
 #
 # Read `man 5 sway` for a complete reference.
-
+### Font Style
+font pango:"Hack Nerd Font" 11
+#
+# for tiled windows, hide the titlebar
+default_border pixel 2
+for_window [title=".*"] border pixel 2
+#
+# Set the border color for child windows
+#client.focused #FFFFFF #285577 #FFFFFF #f28b24 #f2d024
+#client.focused_inactive #333333 #5f676a #FFFFFF #484e50 #5f676a
+#client.unfocused #333333 #222222 #888888 #292d2e #222222
+#
+# Gaps
+#gaps inner 4
+#gaps outer 2
+#
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
@@ -15,7 +30,7 @@ set $up k
 set $right l
 # Your preferred terminal emulator
 # Recommends: foot
-set $term kitty 
+set $term foot 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.

@@ -1,7 +1,7 @@
 * {
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: "Hack Nerd Font";
-    font-size: 14px;
+    font-size: 12pt;
 }
 
 window#waybar {
@@ -112,8 +112,8 @@ button:hover {
 }
 
 #battery {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: transparent;
+    color: #ffffff;
 }
 
 #battery.charging, #battery.plugged {
