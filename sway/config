@@ -36,6 +36,9 @@ output * bg /home/mmarcoux/Pictures/umbrella.jpeg fill
 # Kanshi configures display outputs, ~/.config/kanshi/config
 exec_always kanshi
 
+#initially enable numlock
+input type:keyboard xkb_numlock enabled
+
 # Example configuration:
 #
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
