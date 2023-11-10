@@ -76,11 +76,12 @@ require('lazy').setup({
   'jalvesaq/Nvim-R',
   'lervag/vimtex',
 
-  --surround plugin by tpope
+  --tpope essentials
   'tpope/vim-surround',
+  'tpope/vim-commentary',
 
-  -- Github Copilot 
-  'github/copilot.vim',
+  -- Github Copilot see below for configuration
+  'zbirenbaum/copilot.lua',
 
   -- Git related plugins
   'tpope/vim-fugitive',
@@ -507,6 +508,18 @@ local servers = {
 -- Setup neovim lua configuration
 require('neodev').setup()
 
+-- Copilot setup
+require('copilot').setup({
+  suggestion = {
+    auto_trigger = true,
+    keymap = {
+        accept = '<Tab>',
+    }
+  }
+})
+
+
+
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -552,24 +565,24 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
+   -- ['<Tab>'] = cmp.mapping(function(fallback)
+   --   if cmp.visible() then
+   --     cmp.select_next_item()
+   --   elseif luasnip.expand_or_locally_jumpable() then
+   --     luasnip.expand_or_jump()
+   --   else
+   --     fallback()
+   --   end
+   -- end, { 'i', 's' }),
+   -- ['<S-Tab>'] = cmp.mapping(function(fallback)
+   --   if cmp.visible() then
+   --     cmp.select_prev_item()
+   --   elseif luasnip.locally_jumpable(-1) then
+   --     luasnip.jump(-1)
+   --   else
+   --     fallback()
+   --   end
+   -- end, { 'i', 's' }),
   },
   sources = {
     { name = 'nvim_lsp' },
