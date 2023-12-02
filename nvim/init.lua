@@ -48,6 +48,18 @@ vim.g.R_csv_app = 'tmux new-window vd' -- uses VisiData in a new tmux window to 
 vim.g.R_openpdf  = 1 --only opens the pdf viewer the first time pdflatex is called
 vim.g.R_assign = 0 --disable feature that replaces _ with <-
 
+-- Custom keybindings for Nvim-R
+function custom_nvim_r_mappings()
+  -- send selection to R in visual mode with <leader>ss
+  vim.api.nvim_buf_set_keymap(0, 'v', '<LocalLeader>ss', '<Plug>RSendSelection', { silent = true, noremap = false })
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'r',
+    callback = custom_nvim_r_mappings
+})
+
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
