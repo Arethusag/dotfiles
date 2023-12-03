@@ -1,5 +1,4 @@
  profile {
- 	output "Chimei Innolux Corporation 0x14F3 Unknown" disable
 	output "Lenovo Group Limited LEN T2324pA V1776019" enable mode 1920x1080 transform 90 position 0,0 
 	output "LG Electronics LG HDR 4K 0x0000084F" enable mode 3840x2160 position 1080,0
 	output "ViewSonic Corporation XG2431 WEE213100059" enable mode 1920x1080 transform 90 position 4920,0

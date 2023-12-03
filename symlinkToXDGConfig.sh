@@ -5,7 +5,7 @@
 SOURCE_DIR=$(pwd)
 
 # Destination directory where links will be created
-DEST_DIR="$HOME/.config_symlink_test"
+DEST_DIR="$HOME/.config"
 
 # Check if DEST_DIR exists, create if it doesn't
 if [ ! -d "$DEST_DIR" ]; then
