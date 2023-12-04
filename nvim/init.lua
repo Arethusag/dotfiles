@@ -48,6 +48,12 @@ vim.g.R_csv_app = 'tmux new-window vd' -- uses VisiData in a new tmux window to 
 vim.g.R_openpdf  = 1 --only opens the pdf viewer the first time pdflatex is called
 vim.g.R_assign = 0 --disable feature that replaces _ with <-
 
+-- Enable spell checking for .tex files
+vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
+    pattern = "*.tex",
+    command = "setlocal spell spelllang=en_us",
+})
+
 -- Custom keybindings for Nvim-R
 function custom_nvim_r_mappings()
   -- send selection to R in visual mode with <leader>ss
@@ -502,13 +508,14 @@ require('mason-lspconfig').setup()
 local servers = {
   r_language_server = {},
   texlab = {},
-  -- clangd = {},
-  -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  -- tsserver = {},
-  -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-
+  clangd = {},
+  pyright = {},
+  rust_analyzer = {},
+  tsserver = {},
+  omnisharp = {},
+  julials = {},
+  marksman = {},
+  html = { filetypes = { 'html', 'twig', 'hbs'} },
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
