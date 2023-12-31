@@ -1,6 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 export PATH="$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
-export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/mmarcoux/.local/share/flatpak/exports/share
+export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/mmarcoux/.local/share/flatpak/exports/share:/usr/share:/usr/local/share
+export XDG_CONFIG_DIRS="/etc/xdg"export
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"

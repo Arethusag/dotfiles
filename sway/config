@@ -35,28 +35,31 @@ set $term foot
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 # Recommends: rofi-wayland
-set $rofi_cmd rofi \
-        -terminal '$term'
+set $fuzzel_cmd fuzzel
 # Shows a combined list of the applications with desktop files and
 # executables from PATH.
 # TODO: add window with the next release of rofi-wayland
-set $menu $rofi_cmd -show combi -combi-modes drun#run -modes combi
+set $menu $fuzzel_cmd
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # Requires: desktop-backgrounds-compat, swaybg
-output * bg /home/mmarcoux/Pictures/umbrella.jpeg fill
+output eDP-1 scale 1
+output * bg $HOME/Github/backgrounds/portal.png fill
 
 # Kanshi configures display outputs, ~/.config/kanshi/config
-exec_always kanshi
+# exec_always kanshi
+exec_always {
+    # Check if Waybar is already running
+    pgrep -x waybar >/dev/null || waybar
+}
 
 #initially enable numlock
 input type:keyboard xkb_numlock enabled
 
 # Example configuration:
 #
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
@@ -64,10 +67,10 @@ input type:keyboard xkb_numlock enabled
 #
 # Example configuration:
 #
- exec swayidle -w \
-          timeout 300 'swaylock -f -c 000000' \
-          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-          before-sleep 'swaylock -f -c 000000'
+exec swayidle -w \
+         timeout 300 'swaylock -f -c 000000' \
+         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         before-sleep 'swaylock -f -c 000000'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
