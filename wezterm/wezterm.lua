@@ -12,6 +12,14 @@ end
 
 -- This is where you actually apply your config choices
 
+-- For example, changing the color scheme:
+config.color_scheme = 'OneDark (base16)'
+
+-- background black #181a1f
+config.colors = {
+	background = '#282c34'
+}
+
 -- Remove the top tab bar
 config.enable_tab_bar = false
 
