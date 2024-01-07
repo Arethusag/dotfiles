@@ -2,8 +2,8 @@
 export PATH="$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
 export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/mmarcoux/.local/share/flatpak/exports/share:/usr/share:/usr/local/share
 export XDG_CONFIG_DIRS="/etc/xdg"export
-export XDG_SESSION_TYPE="wayland"
-export WAYLAND_DISPLAY="wayland-0"
+# export XDG_SESSION_TYPE="wayland"
+export WAYLAND_DISPLAY="wayland-1"
 
 
 
