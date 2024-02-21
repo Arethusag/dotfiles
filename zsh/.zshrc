@@ -1,25 +1,7 @@
-# If you come from bash you might have to change your $PATH.
-export PATH="$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
-export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/mmarcoux/.local/share/flatpak/exports/share:/usr/share:/usr/local/share
-export XDG_CONFIG_DIRS="/etc/xdg"export
-# export XDG_SESSION_TYPE="wayland"
-# export WAYLAND_DISPLAY="wayland-1"
-export BROWSER="firefox"
-
-
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-# Set default editor
-export EDITOR='nvim'
-
-# Set name of the theme to load 
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-
-#custom plugins 
+# plugins must be sourced first before oh-my-zsh
 plugins=(
 git
+z
 zsh-vi-mode
 zsh-autosuggestions
 zsh-autocomplete
@@ -27,38 +9,63 @@ zsh-syntax-highlighting
 fast-syntax-highlighting
 )
 
-
-# Use lf to switch directories and bind it to ctrl-o
-lfcd () {
-    tmp="$(mktemp)"
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
-    fi
-}
-bindkey -s '^o' 'lfcd\n'
-
-# Edit line in vim with ctrl-e:
-autoload edit-command-line; zle -N edit-command-line
-bindkey '^e' edit-command-line
-
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
 
-# # luaver configuration
-# export LUVER_DIR="${LUVER_DIR:-"${XDG_DATA_HOME:-"${HOME}/.local/share"}/luver"}"
-#
-# if [[ ! -d "${LUVER_DIR}/self" ]]; then
-#   git clone --quiet https://github.com/MunifTanjim/luver.git "${LUVER_DIR}/self"
-# fi
-#
-# source "${LUVER_DIR}/self/luver.plugin.zsh"
+# history search with arrow keys
+# this overrides the issue with zsh-vi-mode binding these keys
+zvm_bindkey vicmd "${terminfo[kcuu1]}" up-line-or-history
+zvm_bindkey viins "${terminfo[kcuu1]}" up-line-or-history
+zvm_bindkey vicmd "${terminfo[kcud1]}" down-line-or-history
+zvm_bindkey viins "${terminfo[kcud1]}" down-line-or-history
+
+# If you come from bash you might have to change your $PATH.
+export PATH="$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
+export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/mmarcoux/.local/share/flatpak/exports/share:/usr/share:/usr/local/share
+export XDG_CONFIG_DIRS="/etc/xdg"export
+
+# export XDG_SESSION_TYPE="wayland"
+# export WAYLAND_DISPLAY="wayland-1"
+export BROWSER="firefox"
+
+#set default opener
+export OPENER="xdg-open"
+
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# Set default editor
+export EDITOR='nvim'
+alias vi='nvim'
+
+#history settings
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+export HISTSIZE="100000"
+
+#custom lf command that switches current directory upon exit
+lf() {
+    export LF_CD_FILE=/var/tmp/.lfcd-$$
+    command lf $@
+    if [ -s "$LF_CD_FILE" ]; then
+        local DIR="$(realpath "$(cat "$LF_CD_FILE")")"
+        if [ "$DIR" != "$PWD" ]; then
+            echo "cd to $DIR"
+            cd "$DIR"
+        fi
+        rm "$LF_CD_FILE"
+    fi
+    unset LF_CD_FILE
+}
 
 # Enable colors and change prompt:
 autoload -U colors && colors
 PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
-
 
 # Custom FZF commands
 exclude_dirs=(
@@ -74,7 +81,7 @@ exclude_dirs=(
 )
 
 # for opening files in nvim
-vfzf() {
+vf() {
     local file
     local exclude_part=()
     
@@ -90,23 +97,18 @@ vfzf() {
 }
 
 # for cd'ing into directories
-cfzf() {
-	local dir
-        local exclude_part=()
+cf() {
+    local dir
+    local exclude_part=()
 
-        # construct exclusion list
-        for dir in "${exclude_dirs[@]}"; do
-            exclude_part+=("-path" "$dir" "-prune" "-o")
-        done
+    # construct exclusion list
+    for dir in "${exclude_dirs[@]}"; do
+        exclude_part+=("-path" "$dir" "-prune" "-o")
+    done
 
-         # find directories and cd into them
-        dir=$(find . "${exclude_part[@]}" -type d \( -name ".*" -o -name "*" \) -print \
-            | fzf --height 40% --reverse --border) \
-            && cd "$dir"
+     # find directories and cd into them
+    dir=$(find . "${exclude_part[@]}" -type d \( -name ".*" -o -name "*" \) -print \
+        | fzf --height 40% --reverse --border) \
+        && cd "$dir"
 }
-
-
-
-#eval "$(direnv hook bash)"
-
 

@@ -15,6 +15,20 @@ for_window [title=".*"] border pixel 2
 exec_always export WAYLAND_DISPLAY="wayland-1"
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 
+#similar to above, but needed for swaymsg to access the socket
+exec_always export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock
+
+# thinkpad specific extra buttons bindings
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+
+#wayland brightness control
+bindsym XF86MonBrightnessUp exec brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
+
+#microphone toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 #
 # Set the border color for child windows
 #client.focused #FFFFFF #285577 #FFFFFF #f28b24 #f2d024
@@ -60,6 +74,9 @@ output * bg $HOME/Github/backgrounds/portal.png fill
 exec_always {
     # Check if Waybar is already running
     pgrep -x waybar >/dev/null || waybar
+    pgrep -x nm-applet >/dev/null || nm-applet
+    pgrep -x blueman-applet >/dev/null || blueman-applet
+    pgrep -x dropbox >/dev/null || dropbox
 }
 
 #initially enable numlock
@@ -84,16 +101,16 @@ exec swayidle -w \
 # resumed. It will also lock your screen before your computer goes to sleep.
 
 ### Input configuration
-#
+
 # Example configuration:
-#
-#   input "2:14:SynPS/2_Synaptics_TouchPad" {
-#       dwt enabled
-#       tap enabled
-#       natural_scroll enabled
-#       middle_emulation enabled
-#   }
-#
+
+input "2:7:SynPS/2_Synaptics_TouchPad" {
+  dwt enabled
+  tap enabled
+  natural_scroll enabled
+  middle_emulation enabled
+}
+
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 

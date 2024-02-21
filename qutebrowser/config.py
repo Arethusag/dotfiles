@@ -169,6 +169,9 @@ config.set('content.local_content_can_access_remote_urls', True, 'file:///home/m
 # Type: Bool
 config.set('content.local_content_can_access_file_urls', False, 'file:///home/mmarcoux/.local/share/qutebrowser/userscripts/*')
 
+# Set default zoom level
+config.set('zoom.default', '125%')
+
 # Search engines which can be used via the address bar.  Maps a search
 # engine name (such as `DEFAULT`, or `ddg`) to a URL with a `{}`
 # placeholder. The placeholder will be replaced by the search term, use
@@ -521,7 +524,7 @@ c.fonts.default_family = 'Hack Nerd Font'
 # either a float value with a "pt" suffix, or an integer value with a
 # "px" suffix.
 # Type: String
-c.fonts.default_size = '12pt'
+c.fonts.default_size = '16pt'
 
 # Bindings for normal mode
 config.bind(',m', 'spawn mpv {url}')

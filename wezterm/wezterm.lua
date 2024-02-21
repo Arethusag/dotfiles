@@ -23,5 +23,7 @@ config.colors = {
 -- Remove the top tab bar
 config.enable_tab_bar = false
 
+
+config.font_size = 18.0
 -- and finally, return the configuration to wezterm
 return config

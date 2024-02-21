@@ -2,17 +2,27 @@
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required
 --  (otherwise wrong leader will be used)
-vim.g.mapleader      = ' '
-vim.g.maplocalleader = '\\'
+vim.g.mapleader        = ' '
+vim.g.maplocalleader   = '\\'
+
+--turn off swap files
+vim.opt.swapfile       = false
+
+-- show relative line numbers
+vim.opt.relativenumber = true
+
+
+-- disable auto commenting
+vim.cmd [[autocmd FileType * setlocal formatoptions-=cro]]
 
 -- Global vim options for Nvim-R
 
 -- uses VisiData in a new tmux window to view dataframes
-vim.g.R_csv_app      = 'tmux new-window vd'
+vim.g.R_csv_app = 'tmux new-window vd'
 
 --only opens the pdf viewer the first time pdflatex is called
-vim.g.R_openpdf      = 1
-vim.g.R_assign       = 0 --disable feature that replaces _ with <-
+vim.g.R_openpdf = 1
+vim.g.R_assign  = 0 --disable feature that replaces _ with <-
 
 -- Enable spell checking for .tex files
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
@@ -32,20 +42,6 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = custom_nvim_r_mappings
 })
 
---load user installed lua packages
--- Set up Lua package path to include the magick rock
--- local magick_path = "/.local/share/luver/lua-versions/5.1.4/installation/" ..
---     "share/lua/5.1/"
---
--- -- Append the path for magick and any submodules
--- package.path = package.path .. ";" .. vim.fn.expand("$HOME") ..
---     magick_path .. "?.lua;"
--- package.path = package.path .. ";" .. vim.fn.expand("$HOME") ..
---     magick_path .. "?/init.lua;"
--- package.path = package.path .. ";" .. vim.fn.expand("$HOME") ..
---     magick_path .. "gmwand/?.lua;"
--- package.path = package.path .. ";" .. vim.fn.expand("$HOME") ..
---     magick_path .. "wand/?.lua;"
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -66,6 +62,9 @@ vim.opt.rtp:prepend(lazypath)
 --install plugins here
 require('lazy').setup({
 
+  -- undo tree
+  "mbbill/undotree",
+
   -- molten plugin for jupyter notebooks
   "benlubas/molten-nvim",
 
@@ -73,8 +72,8 @@ require('lazy').setup({
   'jalvesaq/Nvim-R',
   'lervag/vimtex',
 
-  --tpope essentials
-  'tpope/vim-commentary',
+  --Session manager, open session with nvim -S,
+  --Save session with :mksession
   'tpope/vim-obsession',
 
   -- Github Copilot see below for configuration
@@ -300,6 +299,10 @@ vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'",
   { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'",
   { expr = true, silent = true })
+
+-- Remap for preserving visual selection while indenting
+vim.keymap.set('v', '<', '<gv', { noremap = true, silent = true })
+vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
