@@ -14,29 +14,24 @@ export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
 
 # history search with arrow keys
-# this overrides the issue with zsh-vi-mode binding these keys
-zvm_bindkey vicmd "${terminfo[kcuu1]}" up-line-or-history
-zvm_bindkey viins "${terminfo[kcuu1]}" up-line-or-history
-zvm_bindkey vicmd "${terminfo[kcud1]}" down-line-or-history
-zvm_bindkey viins "${terminfo[kcud1]}" down-line-or-history
+zvm_after_init_commands+=("bindkey '^[[A' up-line-or-history" 
+    "bindkey '^[[B' down-line-or-history")
+
+#export key delay rate and key repeat rate
+export WLC_KEYBOARD_REPEAT_RATE=35
+export WLC_KEYBOARD_REPEAT_DELAY=250
 
 # If you come from bash you might have to change your $PATH.
 export PATH="$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
-export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/mmarcoux/.local/share/flatpak/exports/share:/usr/share:/usr/local/share
+export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:/usr/share:/usr/local/share
 export XDG_CONFIG_DIRS="/etc/xdg"export
 
-# export XDG_SESSION_TYPE="wayland"
-# export WAYLAND_DISPLAY="wayland-1"
+#Default programs
 export BROWSER="firefox"
-
-#set default opener
 export OPENER="xdg-open"
-
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-# Set default editor
 export EDITOR='nvim'
+
+#aliases
 alias vi='nvim'
 
 #history settings

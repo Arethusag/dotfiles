@@ -11,12 +11,10 @@ vim.opt.swapfile       = false
 -- show relative line numbers
 vim.opt.relativenumber = true
 
-
 -- disable auto commenting
 vim.cmd [[autocmd FileType * setlocal formatoptions-=cro]]
 
 -- Global vim options for Nvim-R
-
 -- uses VisiData in a new tmux window to view dataframes
 vim.g.R_csv_app = 'tmux new-window vd'
 
@@ -70,7 +68,11 @@ require('lazy').setup({
 
   -- Neovim plugin for R
   'jalvesaq/Nvim-R',
+
+  -- latex plugins
   'lervag/vimtex',
+  'micangl/cmp-vimtex',
+
 
   --Session manager, open session with nvim -S,
   --Save session with :mksession
@@ -124,6 +126,9 @@ require('lazy').setup({
 
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
+
+      --adds type icons to completion menu
+      'onsails/lspkind-nvim',
     },
   },
 
@@ -287,6 +292,11 @@ vim.o.completeopt = 'menuone,noselect'
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+-- Default tab settings
+vim.o.tabstop = 4
+vim.o.expandtab = true
+vim.o.shiftwidth = 4
 
 -- [[ Basic Keymaps ]]
 
@@ -570,6 +580,7 @@ mason_lspconfig.setup_handlers {
 -- See `:help cmp`
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
+local lspkind = require 'lspkind'
 require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
@@ -580,6 +591,19 @@ local has_words_before = function()
 end
 
 cmp.setup {
+  formatting = {
+    -- Use lspkind icons
+    format = lspkind.cmp_format({
+      mode = "symbol_text",
+      menu = ({
+        nvim_lsp = "[LSP]",
+        luasnip = "[LuaSnip]",
+        copilot = "[Copilot]",
+        vimtex = "[VimTeX]",
+        cmp_nvim_r = "[R]",
+      }),
+    }),
+  },
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
@@ -633,10 +657,18 @@ cmp.setup {
     },
   },
   sources = {
-    { name = 'copilot' },
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'cmp_nvim_r' },
+    { name = 'copilot',    max_item_count = 5 },
+    {
+      name = 'nvim_lsp',
+      max_item_count = 5,
+      -- dont suggest text from nvm_lsp
+      entry_filter = function(entry, ctx)
+        return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
+      end
+    },
+    { name = 'luasnip',    max_item_count = 5 },
+    { name = 'cmp_nvim_r', max_item_count = 5 },
+    { name = 'vimtex',     max_item_count = 5 },
   },
 }
 
