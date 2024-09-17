@@ -517,7 +517,7 @@ c.colors.webpage.darkmode.enabled = True
 # font setting, it's replaced with the fonts listed here. If set to an
 # empty value, a system-specific monospace default is used.
 # Type: List of Font, or Font
-c.fonts.default_family = 'Hack Nerd Font'
+c.fonts.default_family = 'Iosevka Nerd Font'
 
 # Default font size to use. Whenever "default_size" is used in a font
 # setting, it's replaced with the size listed here. Valid values are

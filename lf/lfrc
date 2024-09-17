@@ -1,6 +1,6 @@
 #dual pane single column mode
-set no preview
-set ratios 1
+# set no preview
+# set ratios 1
 set info size:time
 
 # interpreter for shell commands
@@ -22,18 +22,15 @@ cmd mkdir %{{
 
 map a :push %mkdir<space>
 
-# # cusom previewer
-# set previewer ctpv
-# set cleaner ctpvclear
-# &ctpv -s $id
-# &ctpvquit $id
+# cusom previewer
+set previewer ctpv
+set cleaner ctpvclear
+&ctpv -s $id
+&ctpvquit $id
 
 # #defualt previewer
 # set previewer lf-previewer
 # set cleaner lf-cleaner
-
-set previewer ~/.config/lf/lf_kitty_preview
-set cleaner ~/.config/lf/lf_kitty_clean
 
 cmd quit-and-cd &{{
     pwd > $LF_CD_FILE
@@ -41,14 +38,6 @@ cmd quit-and-cd &{{
 }}
 
 map Q quit-and-cd
-
-
-# # use x to exit with changing current directory
-# map x quitcd
-# cmd quitcd ${{
-# 	echo "1" > "$LF_TEMPDIR"/cdtolastdir
-# 	lf -remote "send $id quit"
-# }}
 
 # define a custom 'open' command
 # This command is called when current file is not a directory. You may want to
