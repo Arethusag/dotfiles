@@ -3,6 +3,11 @@
 ### Font Style
 font pango:"Iosevka Nerd Font" 11
 
+# disable laptop screen on lid close
+exec swayidle -w \
+    timeout 1 'swaymsg output eDP-1 dpms off; swaymsg workspace 1 output DP-4' \
+    resume 'swaymsg output eDP-1 dpms on'
+
 # for tiled windows, hide the titlebar
 default_border pixel 2
 for_window [title=".*"] border pixel 2
@@ -71,7 +76,7 @@ output * bg $BG_DIR/canyon.jpeg fill
 
 # Kanshi configures display outputs, ~/.config/kanshi/config
 # get output names with `swaymsg -t get_outputs`
-# exec_always kanshi
+exec_always kanshi
 
 ### Waybar startup
 

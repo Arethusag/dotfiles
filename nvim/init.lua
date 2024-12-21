@@ -73,7 +73,7 @@ require('lazy').setup({
   "benlubas/molten-nvim",
 
   -- Neovim plugin for R
-  'jalvesaq/Nvim-R',
+  'R-nvim/R.nvim',
 
   -- latex plugins
   'lervag/vimtex',
