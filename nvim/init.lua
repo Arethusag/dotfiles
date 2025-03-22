@@ -31,11 +31,44 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   command = "setlocal spell spelllang=en_us",
 })
 
+-- Enable tmux style window resizing
+local resize_timer = nil
+
+local function resize_window(key)
+  if resize_timer then
+    resize_timer:stop()
+  end
+
+  -- Execute the resize command
+  if key == ">" then
+    vim.cmd("resize +2")
+  elseif key == "<" then
+    vim.cmd("resize -2")
+  elseif key == "+" then
+    vim.cmd("vertical resize +5")
+  elseif key == "-" then
+    vim.cmd("vertical resize -5")
+  end
+
+  -- Reset the timer
+  resize_timer = vim.defer_fn(function()
+    resize_timer = nil
+  end, 1500) -- 1.5s timeout
+end
+
+-- Key mappings
+vim.keymap.set("n", "<C-w>>", function() resize_window(">") end, { noremap = true, silent = true })
+vim.keymap.set("n", "<C-w><", function() resize_window("<") end, { noremap = true, silent = true })
+vim.keymap.set("n", "<C-w>+", function() resize_window("+") end, { noremap = true, silent = true })
+vim.keymap.set("n", "<C-w>-", function() resize_window("-") end, { noremap = true, silent = true })
+
 -- Custom keybindings for Nvim-R
 function custom_nvim_r_mappings()
   -- send selection to R in visual mode with <leader>ss
   vim.api.nvim_buf_set_keymap(0, 'v', '<LocalLeader>ss',
     '<Plug>RSendSelection', { silent = true, noremap = false })
+  vim.api.nvim_buf_set_keymap(0, 'n', '<LocalLeader>ou',
+    '<Plug>RUpdateObjBrowser', { silent = true, noremap = false })
 end
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -69,9 +102,6 @@ require('lazy').setup({
   -- undo tree
   "mbbill/undotree",
 
-  -- molten plugin for jupyter notebooks
-  "benlubas/molten-nvim",
-
   -- Neovim plugin for R
   'R-nvim/R.nvim',
 
@@ -79,72 +109,9 @@ require('lazy').setup({
   'lervag/vimtex',
   'micangl/cmp-vimtex',
 
-  {                     -- Useful plugin to show you pending keybinds.
-    'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    opts = {
-      icons = {
-        -- set icon mappings to true if you have a Nerd Font
-        mappings = vim.g.have_nerd_font,
-        -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
-        -- default whick-key.nvim defined Nerd Font icons, otherwise define a string table
-        keys = vim.g.have_nerd_font and {} or {
-          Up = '<Up> ',
-          Down = '<Down> ',
-          Left = '<Left> ',
-          Right = '<Right> ',
-          C = '<C-…> ',
-          M = '<M-…> ',
-          D = '<D-…> ',
-          S = '<S-…> ',
-          CR = '<CR> ',
-          Esc = '<Esc> ',
-          ScrollWheelDown = '<ScrollWheelDown> ',
-          ScrollWheelUp = '<ScrollWheelUp> ',
-          NL = '<NL> ',
-          BS = '<BS> ',
-          Space = '<Space> ',
-          Tab = '<Tab> ',
-          F1 = '<F1>',
-          F2 = '<F2>',
-          F3 = '<F3>',
-          F4 = '<F4>',
-          F5 = '<F5>',
-          F6 = '<F6>',
-          F7 = '<F7>',
-          F8 = '<F8>',
-          F9 = '<F9>',
-          F10 = '<F10>',
-          F11 = '<F11>',
-          F12 = '<F12>',
-        },
-      },
-
-      -- Document existing key chains
-      spec = {
-        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
-        { '<leader>d', group = '[D]ocument' },
-        { '<leader>r', group = '[R]ename' },
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      },
-    },
-  },
-
   --Session manager, open session with nvim -S,
   --Save session with :mksession
   'tpope/vim-obsession',
-
-  -- Github Copilot see below for configuration
-  'zbirenbaum/copilot.lua',
-  {
-    'zbirenbaum/copilot-cmp',
-    config = function()
-      require("copilot_cmp").setup()
-    end
-  },
 
   -- Git related plugins
   'tpope/vim-fugitive',
@@ -170,6 +137,15 @@ require('lazy').setup({
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
     },
+  },
+
+  -- Github Copilot see below for configuration
+  'zbirenbaum/copilot.lua',
+  {
+    'zbirenbaum/copilot-cmp',
+    config = function()
+      require("copilot_cmp").setup()
+    end
   },
 
   {
@@ -715,6 +691,7 @@ cmp.setup {
     { name = 'vimtex',     max_item_count = 5 },
   },
 }
+
 
 -- See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
