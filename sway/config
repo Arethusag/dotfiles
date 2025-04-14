@@ -6,6 +6,7 @@ font pango:"Iosevka Nerd Font" 11
 # for tiled windows, hide the titlebar
 default_border pixel 2
 for_window [title=".*"] border pixel 2
+primary_selection disabled
 
 #export wayland display variable
 #this is needed to make wl-copy recoqnize the wayland socket
@@ -14,9 +15,6 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 
 #similar to above, but needed for swaymsg to access the socket
 exec_always export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock
-
-#disable middle mouse paste
-exec_always wl-paste --primary --watch wl-copy --primary --clear
 
 # thinkpad specific extra buttons bindings
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle

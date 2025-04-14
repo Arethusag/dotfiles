@@ -33,6 +33,7 @@ export EDITOR='nvim'
 
 #aliases
 alias vi='nvim'
+alias vim='nvim'
 alias nv='nvim'
 alias pac='sudo pacman -S'
 alias pacu='sudo pacman -Syu'

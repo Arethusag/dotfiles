@@ -1,35 +1,31 @@
--- Set python 3 env location
-vim.g.python3_host_prog = os.getenv("HOME") .. "/.local/pyenv/bin/python"
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required
 --  (otherwise wrong leader will be used)
-vim.g.mapleader         = ' '
-vim.g.maplocalleader    = '\\'
+vim.g.mapleader      = ' '
+vim.g.maplocalleader = '\\'
+
+-- Navigate command completion menu with up/down
+vim.keymap.set('c', '<Up>', '<C-p>', { noremap = true })
+vim.keymap.set('c', '<Down>', '<C-n>', { noremap = true })
+
+--Remove netrw header
+vim.g.netrw_banner     = 0
+
+--Enable syntax folding
+vim.opt.foldmethod     = 'expr'
+vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable     = true
 
 --turn off swap files
-vim.opt.swapfile        = false
+vim.opt.swapfile       = false
 
 -- show relative line numbers
-vim.opt.relativenumber  = true
+vim.opt.relativenumber = true
 
 -- disable auto commenting
 vim.cmd [[autocmd FileType * setlocal formatoptions-=cro]]
-
--- Global vim options for Nvim-R
--- uses VisiData in a new tmux window to view dataframes
-vim.g.R_csv_app = 'tmux new-window vd'
-
---only opens the pdf viewer the first time pdflatex is called
-vim.g.R_openpdf = 1
-vim.g.R_assign  = 0 --disable feature that replaces _ with <-
-
--- Enable spell checking for .tex files
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = "*.tex",
-  command = "setlocal spell spelllang=en_us",
-})
 
 -- Enable tmux style window resizing
 local resize_timer = nil
@@ -62,21 +58,6 @@ vim.keymap.set("n", "<C-w><", function() resize_window("<") end, { noremap = tru
 vim.keymap.set("n", "<C-w>+", function() resize_window("+") end, { noremap = true, silent = true })
 vim.keymap.set("n", "<C-w>-", function() resize_window("-") end, { noremap = true, silent = true })
 
--- Custom keybindings for Nvim-R
-function custom_nvim_r_mappings()
-  -- send selection to R in visual mode with <leader>ss
-  vim.api.nvim_buf_set_keymap(0, 'v', '<LocalLeader>ss',
-    '<Plug>RSendSelection', { silent = true, noremap = false })
-  vim.api.nvim_buf_set_keymap(0, 'n', '<LocalLeader>ou',
-    '<Plug>RUpdateObjBrowser', { silent = true, noremap = false })
-end
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'r',
-  callback = custom_nvim_r_mappings
-})
-
-
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -99,23 +80,12 @@ require('lazy').setup({
   'nvim-tree/nvim-web-devicons',
   'echasnovski/mini.icons',
 
-  -- undo tree
-  "mbbill/undotree",
-
-  -- Neovim plugin for R
-  'R-nvim/R.nvim',
-
-  -- latex plugins
-  'lervag/vimtex',
-  'micangl/cmp-vimtex',
-
   --Session manager, open session with nvim -S,
   --Save session with :mksession
   'tpope/vim-obsession',
 
   -- Git related plugins
   'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -126,7 +96,7 @@ require('lazy').setup({
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
+      -- Automatically install LSPs to std{ 'folke/which-key.nvim', opts = {} },path for neovim
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
 
@@ -139,36 +109,48 @@ require('lazy').setup({
     },
   },
 
-  -- Github Copilot see below for configuration
-  'zbirenbaum/copilot.lua',
-  {
-    'zbirenbaum/copilot-cmp',
-    config = function()
-      require("copilot_cmp").setup()
-    end
-  },
-
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
-
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
-
-      -- Adds a number of user-friendly snippets
-      'rafamadriz/friendly-snippets',
-
       --adds type icons to completion menu
       'onsails/lspkind-nvim',
     },
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- Disable the preset keybinding hints (like for operators, motions etc.)
+      preset = false,
+      plugins = {
+        marks = true,     -- Enable the marks plugin (' and `)
+        registers = true, -- Enable the registers plugin (" and <C-r>)
+        -- Explicitly disable other plugins
+        spelling = {
+          enabled = false,
+        },
+        presets = {
+          operators = false,
+          motions = false,
+          text_objects = false,
+          windows = false,
+          nav = false,
+          z = false,
+          g = false,
+        },
+      },
+      -- Disable automatic keybinding triggers for normal key sequences
+      -- This ensures WhichKey only activates for the plugins configured above
+      triggers = {},
+      show_help = false,
+      show_keys = false,
+    }
+  },
   {
     -- Adds git related signs to the gutter,
     -- as well as utilities for managing changes
@@ -287,10 +269,13 @@ require('lazy').setup({
 -- See `:help vim.o`
 
 -- set grey column at 80 characters
-vim.o.colorcolumn = '120'
+vim.o.colorcolumn = '80'
 
 --disable word wrap
-vim.o.wrap = false
+-- vim.o.wrap = false
+
+--keep cursor 5 lines from top/bottom when jumping pages
+vim.o.scrolloff = 5
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -300,10 +285,6 @@ vim.wo.number = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
-
--- Sync clipboard between OS and Neovim.
---  See `:help 'clipboard'`
--- vim.o.clipboard = 'unnamedplus'
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -329,9 +310,9 @@ vim.o.completeopt = 'menuone,noselect'
 vim.o.termguicolors = true
 
 -- Default tab settings
-vim.o.tabstop = 4
+vim.o.tabstop = 2
 vim.o.expandtab = true
-vim.o.shiftwidth = 4
+vim.o.shiftwidth = 2
 
 -- [[ Basic Keymaps ]]
 
@@ -416,6 +397,7 @@ vim.defer_fn(function()
 
     -- Autoinstall languages that are not installed.
     auto_install = true,
+    folding = { enable = true },
 
     highlight = { enable = true },
     indent = { enable = true },
@@ -532,17 +514,6 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
--- document existing key chains
--- require('which-key').register {
---   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
---   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
---   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
---   ['<leader>h'] = { name = 'More git', _ = 'which_key_ignore' },
---   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
---   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
---   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
--- }
-
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
@@ -550,15 +521,7 @@ require('mason-lspconfig').setup()
 
 -- Enable the following language servers
 local servers = {
-  r_language_server = {},
-  texlab = {},
   clangd = {},
-  pyright = {},
-  rust_analyzer = {},
-  omnisharp = {},
-  julials = {},
-  marksman = {},
-  html = { filetypes = { 'html', 'twig', 'hbs' } },
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -599,10 +562,7 @@ mason_lspconfig.setup_handlers {
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
-local luasnip = require 'luasnip'
 local lspkind = require 'lspkind'
-require('luasnip.loaders.from_vscode').lazy_load()
-luasnip.config.setup {}
 
 local has_words_before = function()
   if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
@@ -617,10 +577,6 @@ cmp.setup {
       mode = "symbol_text",
       menu = ({
         nvim_lsp = "[LSP]",
-        luasnip = "[LuaSnip]",
-        copilot = "[Copilot]",
-        vimtex = "[VimTeX]",
-        cmp_nvim_r = "[R]",
       }),
     }),
   },
@@ -642,8 +598,6 @@ cmp.setup {
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() and has_words_before() then
         cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
       else
         fallback()
       end
@@ -651,8 +605,6 @@ cmp.setup {
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() and has_words_before() then
         cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
       else
         fallback()
       end
@@ -661,8 +613,6 @@ cmp.setup {
   sorting = {
     priority_weight = 2,
     comparators = {
-      require("copilot_cmp.comparators").prioritize,
-
       -- Below is the default comparitor list and order for nvim-cmp
       cmp.config.compare.offset,
       -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
@@ -677,7 +627,6 @@ cmp.setup {
     },
   },
   sources = {
-    { name = 'copilot',    max_item_count = 5 },
     {
       name = 'nvim_lsp',
       max_item_count = 5,
@@ -686,9 +635,6 @@ cmp.setup {
         return require("cmp").lsp.CompletionItemKind.Text ~= entry:get_kind()
       end
     },
-    { name = 'luasnip',    max_item_count = 5 },
-    { name = 'cmp_nvim_r', max_item_count = 5 },
-    { name = 'vimtex',     max_item_count = 5 },
   },
 }
 
