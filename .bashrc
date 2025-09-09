@@ -17,19 +17,6 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
 fi
 export PATH
 
-# Uncomment the following line if you don't like systemctl's auto-paging feature:
-# export SYSTEMD_PAGER=
-
-# User specific aliases and functions
-if [ -d ~/.bashrc.d ]; then
-    for rc in ~/.bashrc.d/*; do
-        if [ -f "$rc" ]; then
-            . "$rc"
-        fi
-    done
-fi
-unset rc
-
 # Set prompt
 . ~/.git-prompt.sh
 PS1='\[\e[1;32m\]\u@\h\[\e[1;33m\] \W\[\e[0m\]\[\e[1;34m\]$(__git_ps1 " (%s)")\[\e[0m\]\$ '
