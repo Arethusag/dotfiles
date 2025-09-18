@@ -8,7 +8,7 @@ default_border pixel 2
 for_window [title=".*"] border pixel 2
 
 # disable middle button paste
-primary_selection disabled
+# primary_selection disabled
 
 # Set background
 output * bg ~/Projects/backgrounds/ferns.jpg fill

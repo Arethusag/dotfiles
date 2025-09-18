@@ -1,5 +1,5 @@
 " Set colorcheme
-colorscheme desert
+colorscheme default
 
 " Enable line numbers
 set number
@@ -37,6 +37,9 @@ set mouse=a
 
 " Set indent style
 autocmd FileType c set cindent
+
+" Set folding
+set foldmethod=syntax
 
 let &t_SI = "\e[5 q"      " Vertical line cursor in insert mode
 let &t_SR = "\e[4 q"      " Underscore cursor in replace mode
