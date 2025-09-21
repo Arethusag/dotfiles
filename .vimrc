@@ -1,11 +1,20 @@
 " Set colorcheme
-colorscheme default
+colorscheme lunaperche
+
+" Set command window height
+set cmdheight=1
 
 " Enable line numbers
 set number
 
 " Disable swap files
 set noswapfile
+
+" Set ripgrep as default program
+set grepprg=rg\ --vimgrep
+
+" Set default make program
+set makeprg=./build.sh
 
 " Disable netrw header
 let g:netrw_banner = 0
@@ -35,6 +44,11 @@ packadd! editorconfig
 " Enable mouse mode
 set mouse=a
 
+" Persist undo history
+set undofile
+set undodir=~/.vim/undo/
+set undolevels=10000
+
 " Set indent style
 autocmd FileType c set cindent
 
@@ -49,7 +63,10 @@ let &t_EI = "\e[2 q"      " Block cursor in normal mode
 autocmd FileType c setlocal omnifunc=ccomplete#Complete
 
 " Auto update tags
-nnoremap <leader>ut :!ctags -R .<CR>
+nnoremap <leader>t :!ctags -R .<CR>
+
+" Open function definition in preview window
+nnoremap <leader>p :ptag <C-R><C-W><CR>
 
 " Remap < and > to retain visual selection after indenting/unindenting
 vnoremap < <gv
