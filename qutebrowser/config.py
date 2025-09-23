@@ -170,7 +170,7 @@ config.set('content.local_content_can_access_remote_urls', True, 'file:///home/m
 config.set('content.local_content_can_access_file_urls', False, 'file:///home/mmarcoux/.local/share/qutebrowser/userscripts/*')
 
 # Set default zoom level
-config.set('zoom.default', '125%')
+config.set('zoom.default', '90%')
 
 # Search engines which can be used via the address bar.  Maps a search
 # engine name (such as `DEFAULT`, or `ddg`) to a URL with a `{}`

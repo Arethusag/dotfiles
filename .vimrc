@@ -88,4 +88,24 @@ set timeoutlen=300
 set laststatus=2
 
 " Custom status line to show filename and cursor position
-set statusline=%f%m%r%h%w\ %=[%{line('.')},%{col('.')}]
+set statusline=%f\ (%{&fileencoding!=''?&fileencoding:&encoding})\ %=[%{line('.')},%{col('.')}\]
+
+" Clang formatter setup
+autocmd FileType c nnoremap <buffer> gq :py3f /usr/share/clang/clang-format.py<CR>
+autocmd FileType c vnoremap <buffer> gq :py3f /usr/share/clang/clang-format.py<CR>
+
+" Autoformat on save
+function! Formatonsave()
+  let l:formatdiff = 1
+  py3f /usr/share/clang/clang-format.py
+endfunction
+autocmd BufWritePre *.h,*.c call Formatonsave()
+
+" Wildmenu config
+set wildmenu
+set wildmode=full
+set wildoptions=pum
+set wildignorecase
+
+" Automatically change cwd to the directory of the current file
+set autochdir
