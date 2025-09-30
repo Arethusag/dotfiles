@@ -1,5 +1,6 @@
 " Set colorcheme
 colorscheme lunaperche
+set background=dark
 
 " Set command window height
 set cmdheight=1
@@ -96,8 +97,8 @@ autocmd FileType c vnoremap <buffer> gq :py3f /usr/share/clang/clang-format.py<C
 
 " Autoformat on save
 function! Formatonsave()
-  let l:formatdiff = 1
-  py3f /usr/share/clang/clang-format.py
+    let l:formatdiff = 1
+    py3f /usr/share/clang/clang-format.py
 endfunction
 autocmd BufWritePre *.h,*.c call Formatonsave()
 
@@ -109,3 +110,7 @@ set wildignorecase
 
 " Automatically change cwd to the directory of the current file
 set autochdir
+
+" Show non-visible characters
+set list
+set listchars=tab:»\ ,trail:·,extends:>,precedes:<
