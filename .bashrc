@@ -19,10 +19,11 @@ export PATH
 
 # Set prompt
 . ~/.git-prompt.sh
-PS1='\[\e[1;32m\]\u@\h\[\e[1;33m\] \W\[\e[0m\]\[\e[1;34m\]$(__git_ps1 " (%s)")\[\e[0m\]\$ '
+PS1='\[\e[1;32m\]\u\[\e[1;31m\]@\[\e[1;35m\]\h\[\e[1;33m\] \W\[\e[0m\]\[\e[1;34m\]$(__git_ps1 " (%s)")\[\e[0m\]\$ '
+
 # Set default editor
-export EDITOR=vimx
-alias vim=vimx
+export EDITOR=vim
+export VISUAL="gvim -f"
 
 HISTCONTROL=ignoredups:erasedups
 
@@ -53,10 +54,8 @@ fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
 # scripts
 alias ts='tmux-sessionizer.sh'
+
+# opencode
+export PATH=/home/mmarcoux/.opencode/bin:$PATH

@@ -16,10 +16,14 @@ set show-mode-in-prompt on
 
 # distinguish between command and insert mode 
 # Prepend (ins) to indicate insert mode and have blinking bar     
-set vi-ins-mode-string "(ins)"\1\e[5 q\2
+set vi-ins-mode-string \1\e[6 q\2
 # prepend (cmd) to indicate command mode and have a blinking block
-set vi-cmd-mode-string "(cmd)"\1\e[1 q\2
+set vi-cmd-mode-string \1\e[2 q\2
 set blink-matching-paren on
+
+# switch to block cursor before executing a command
+set keymap vi-insert
+RETURN: "\e\n"
 
 # sets the readline to display possible completions using different colors
 # to indicate filetypes determined from env variable LC_COLORS
@@ -162,11 +166,12 @@ $if mode=vi
     "gg": beginning-of-history
     "G" : end-of-history
 
-
     # backward history search on up arrow
     "\e\e[A": history-search-backward
     # forward history search on down arrow
     "\e\e[B": history-search-forward
+
+    "v": vi-edit-and-execute-command
 
     # settings to be changed in insert mode
     set keymap vi-insert
@@ -176,3 +181,4 @@ $if mode=vi
 
 # end vi mode settings
 $endif
+
