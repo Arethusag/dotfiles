@@ -175,3 +175,33 @@ endfunction
 " DBext profiles
 let g:dbext_default_profile_SQLite_osfi = 'type=DBI:driver=SQLite:conn_parms=dbname=/home/mmarcoux/personal/osfi/data.db'
 let g:omni_sql_default_replace_compl_type = 'column'
+
+" Enable tmux-style window resizing
+let g:resize_timer = -1
+
+function! ResizeWindow(key) abort
+  if g:resize_timer != -1
+    call timer_stop(g:resize_timer)
+  endif
+
+  " Execute the resize command
+  if a:key ==# '>'
+    resize +2
+  elseif a:key ==# '<'
+    resize -2
+  elseif a:key ==# '+'
+    vertical resize +5
+  elseif a:key ==# '-'
+    vertical resize -5
+  endif
+
+  " Reset the timer
+  let g:resize_timer = timer_start(1500, { -> execute('let g:resize_timer = -1') })
+endfunction
+
+" Key mappings
+" Use Alt + arrow keys for resizing
+nnoremap <silent> <A-Right> :call ResizeWindow('+')<CR>
+nnoremap <silent> <A-Left> :call ResizeWindow('-')<CR>
+nnoremap <silent> <A-Up> :call ResizeWindow('>')<CR>
+nnoremap <silent> <A-Down> :call ResizeWindow('<')<CR>
