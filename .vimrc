@@ -31,7 +31,6 @@ set makeprg=./build.sh
 " Netrw settings 
 let g:netrw_banner = 0       " Disable header
 let g:netrw_liststyle = 3    " Tree style view
-let g:netrw_browse_split = 4 " Opens selected files in previous window
 let g:netrw_winsize = 25     " Side bar width
 let g:netrw_altv = 1         " Alternate Vsplit behaviour
 nnoremap <leader>e :Lexplore!<CR>
